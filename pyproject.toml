@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "vendor-extension"
+name = "vendor_extension"
 version = "1.0.0"
 description = "Vendor Table Manager"
 authors = ["Developer <dev@example.com>"]
@@ -11,7 +11,7 @@ starlette = "*"
 jinja2 = "*"
 
 [tool.poetry.plugins."connect.eaas.ext"]
-"webapp" = "extension:VendorTableExtension"
+"webapp" = "vendor_extension:VendorTableExtension"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
