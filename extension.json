@@ -1,0 +1,10 @@
+{
+  "id": "EXT-565-289",
+  "name": "Vendor Information",
+  "description": "A tool to manage vendor tables.",
+  "version": "1.0.0",
+  "readme_url": "https://example.com/readme",
+  "changelog_url": "https://example.com/changelog",
+  "icon": "https://example.com/icon.png",
+  "audience": ["distributor"]
+}

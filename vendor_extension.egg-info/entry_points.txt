@@ -1,0 +1,2 @@
+[connect.eaas.ext]
+webapp = extension:VendorTableExtension

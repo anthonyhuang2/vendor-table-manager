@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: vendor-extension
+Version: 1.0.0
+Summary: Vendor Table Manager
+Requires-Dist: connect-extension-runner
+Requires-Dist: starlette
+Requires-Dist: jinja2

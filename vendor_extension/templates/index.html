@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendor Manager</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; cursor: pointer; }
+        .controls { margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 5px;}
+        input, select { padding: 8px; margin-right: 10px; }
+        button { padding: 8px 15px; cursor: pointer; background-color: #007bff; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <h2>Vendor & Product Management</h2>
+
+    <div class="controls">
+        <h3>1. Configure Headers</h3>
+        <input type="text" id="headerKey" placeholder="Column Key (e.g. price)">
+        <input type="text" id="headerLabel" placeholder="Display Name (e.g. Price USD)">
+        <select id="headerType">
+            <option value="text">Free Text</option>
+            <option value="preset">Preset (Dropdown)</option>
+        </select>
+        <button onclick="addHeader()">Add Column</button>
+        <button onclick="saveSchema()" style="background-color: green;">Save Schema</button>
+        <div id="currentHeaders"></div>
+    </div>
+
+    <div class="controls">
+        <h3>2. Add New Entry</h3>
+        <div id="inputContainer"></div>
+        <br><button onclick="addRow()">Add Row</button>
+    </div>
+
+    <table id="vendorTable">
+        <thead><tr id="tableHeadRow"></tr></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script>
+        let schema = [];
+        let rows = [];
+
+        async function loadData() {
+            const response = await fetch('/api/retrieve_table_data'); 
+            const data = await response.json();
+            schema = data.headers || [];
+            rows = data.rows || [];
+            renderTable();
+            renderInputForm();
+            renderCurrentHeadersList();
+        }
+
+        async function saveSchema() {
+            await fetch('/api/save_table_schema', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ headers: schema })
+            });
+            alert('Schema Saved!');
+            renderTable();
+            renderInputForm();
+        }
+
+        async function addRow() {
+            const rowData = {};
+            schema.forEach(col => {
+                const el = document.getElementById(`input_${col.key}`);
+                if(el) rowData[col.key] = el.value;
+            });
+            await fetch('/api/add_row', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ row_data: rowData })
+            });
+            rows.push(rowData);
+            renderTable();
+        }
+
+        function addHeader() {
+            const key = document.getElementById('headerKey').value;
+            const label = document.getElementById('headerLabel').value;
+            const type = document.getElementById('headerType').value;
+            if(key && label) {
+                schema.push({ key, label, type });
+                renderCurrentHeadersList();
+            }
+        }
+
+        function renderCurrentHeadersList() {
+            document.getElementById('currentHeaders').innerHTML = 
+                "<strong>Current Columns:</strong> " + schema.map(s => s.label).join(", ");
+        }
+
+        function renderInputForm() {
+            const container = document.getElementById('inputContainer');
+            container.innerHTML = '';
+            schema.forEach(col => {
+                let html = col.type === 'preset' 
+                    ? `<select id="input_${col.key}"><option value="Standard">Standard</option><option value="Premium">Premium</option></select>`
+                    : `<input type="text" id="input_${col.key}">`;
+                container.innerHTML += `${col.label}: ${html} `;
+            });
+        }
+
+        function renderTable() {
+            const headRow = document.getElementById('tableHeadRow');
+            headRow.innerHTML = '';
+            schema.forEach(col => {
+                const th = document.createElement('th');
+                th.innerText = col.label;
+                th.onclick = () => sortTable(col.key);
+                headRow.appendChild(th);
+            });
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                schema.forEach(col => {
+                    const td = document.createElement('td');
+                    td.innerText = row[col.key] || '';
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }
+
+        let sortDir = 1;
+        function sortTable(key) {
+            rows.sort((a, b) => {
+                const valA = (a[key] || '').toLowerCase();
+                const valB = (b[key] || '').toLowerCase();
+                return (valA < valB ? -1 : 1) * sortDir;
+            });
+            sortDir *= -1;
+            renderTable();
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
