@@ -11,7 +11,7 @@ starlette = "*"
 jinja2 = "*"
 
 [tool.poetry.plugins."connect.eaas.ext"]
-"webapp" = "vendor_extension:VendorTableExtension"
+"webapp" = "vendor_extension.extension:VendorTableExtension"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
