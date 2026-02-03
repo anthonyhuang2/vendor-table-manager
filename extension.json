@@ -8,7 +8,7 @@
         "settings": {
             "label": "Vendor Table Manager",
             "url": "/admin",
-            "audience": ["distributor", "vendor"]
+            "audience": ["provider", "distributor", "vendor"]
         }
     },
     "capabilities": {
