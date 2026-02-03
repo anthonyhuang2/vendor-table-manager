@@ -14,3 +14,4 @@ class VendorTableExtension(WebApplicationBase):
                 'data': 'Welcome to your extension!'
             }
         }
+# Final fix for version 1.0.6
