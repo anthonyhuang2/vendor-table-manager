@@ -1,15 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Vendor Table Manager</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Manager</title>
+    
     <link rel="stylesheet" href="https://unpkg.com/@cloudblueconnect/connect-ui-toolkit/dist/styles/main.css">
+    <script type="module" src="https://unpkg.com/@cloudblueconnect/connect-ui-toolkit/dist/index.js"></script>
+
+    <style>
+        /* Simple spacing for the layout */
+        .main-container { padding: 24px; }
+    </style>
 </head>
 <body>
-    <div class="c-app-layout">
-        <div class="c-card">
-            <h1>Success!</h1>
-            <p>{{ data }}</p>
+    <div id="app" class="c-app-layout">
+        
+        <div class="main-container">
+            <c-card>
+                <c-card-header>
+                    <c-icon icon="google-table" size="24" class="c-mr-2"></c-icon>
+                    <h1 class="c-heading">Vendor Table Manager</h1>
+                    <div slot="actions">
+                        <c-button type="primary" id="refreshBtn">
+                            Refresh Data
+                        </c-button>
+                    </div>
+                </c-card-header>
+
+                <c-card-content>
+                    <p class="c-mb-4">
+                        Welcome, <strong>{{ context.user_name }}</strong>! 
+                        This is your native Connect UI module.
+                    </p>
+
+                    <c-table id="vendorTable">
+                        <c-table-header>
+                            <c-table-cell>Vendor Name</c-table-cell>
+                            <c-table-cell>Status</c-table-cell>
+                            <c-table-cell>Action</c-table-cell>
+                        </c-table-header>
+                        <c-table-row>
+                            <c-table-cell>Acme Corp</c-table-cell>
+                            <c-table-cell>
+                                <c-status type="success">Active</c-status>
+                            </c-table-cell>
+                            <c-table-cell>
+                                <c-button variant="outlined" size="small">Edit</c-button>
+                            </c-table-cell>
+                        </c-table-row>
+                        <c-table-row>
+                            <c-table-cell>Globex Inc</c-table-cell>
+                            <c-table-cell>
+                                <c-status type="warning">Pending</c-status>
+                            </c-table-cell>
+                            <c-table-cell>
+                                <c-button variant="outlined" size="small">Edit</c-button>
+                            </c-table-cell>
+                        </c-table-row>
+                    </c-table>
+
+                </c-card-content>
+            </c-card>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for the toolkit to be ready
+            console.log("Connect UI Toolkit Loaded");
+            
+            // Interaction Example
+            document.getElementById('refreshBtn').addEventListener('click', () => {
+                alert('You clicked refresh! This is where you call your backend API.');
+            });
+        });
+    </script>
 </body>
 </html>

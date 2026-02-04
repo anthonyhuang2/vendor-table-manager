@@ -1,4 +1,3 @@
-# We import 'WebApplicationBase' from the core library
 from connect.eaas.core.extension import WebApplicationBase
 from connect.eaas.core.decorators import web_app, router
 
@@ -7,11 +6,11 @@ class VendorTableExtension(WebApplicationBase):
 
     @router.get('/admin')
     def admin_page(self, request):
+        # We can grab the user's name from the request header if available, 
+        # or just hardcode a placeholder for now.
         return {
             'template': 'index.html',
             'context': {
-                'title': 'Vendor Table Manager',
-                'data': 'Welcome to your extension!'
+                'user_name': request.headers.get('Connect-User-Name', 'Partner')
             }
         }
-# Final fix for version 1.0.6

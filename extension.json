@@ -2,7 +2,7 @@
     "name": "Vendor Table Manager",
     "version": "1.0.0",
     "description": "Manage vendor data tables.",
-    "readme_url": "https://github.com/your-repo/readme.md",
+    "readme_url": "https://github.com/anthonyhuang2/vendor-table-manager/blob/main/README.md",
     "icon": "https://cdn.icon-icons.com/icons2/1378/PNG/512/table_90757.png",
     "ui": {
         "settings": {
